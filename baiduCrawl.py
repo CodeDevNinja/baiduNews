@@ -6,11 +6,15 @@ from lxml import etree
 from selenium import webdriver
 #from db.MongoHelp import MongoHelper as SqlHelper
 from MongoHelp import MongoHelper as SqlHelper
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 class BaiduNews:
     def __init__(self):
         self.SqlH = SqlHelper()
         self.SqlH.init_db('baiduNews')
     def news_crawl(self):
+        desired_capabilities = DesiredCapabilities.PHANTOMJS.copy()
+
         type = ('focus-top','local_news','guonei','guojie','caijing','yule','tiyu','col-auto','col-house','hulianwang','internet-plus','col-tech','col-edu','col-game','col-discovery','col-healthy','col-lady','shehui','junshi','tupianxinwen')
         browser = webdriver.PhantomJS()
         browser.get('http://news.baidu.com/')

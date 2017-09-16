@@ -11,12 +11,19 @@ class MongoHelper(ISQLHelper):
         self.client = pymongo.MongoClient(DB_CONFIG['DB_CONNECT_STRING'], connect=False)
 
     def init_db(self,db_name):
-        create_time = time.strftime('%Y/%m/%d', time.localtime(time.time()))
+        create_time = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         self.db = self.client[db_name]
         self.collection = self.db[create_time]
 
     def drop_db(self):
         self.client.drop_database(self.db)
+
+    def insertZhiHu(self, value=None):
+        if value:
+            # newsObj = dict(user_name=value['user_name'], followers=value['followers'], flowing=value['flowing'],
+            #                collect=value['save']
+            #                )
+            self.collection.insert(value)
 
     def insert(self, value=None):
         if value:
@@ -54,13 +61,18 @@ class MongoHelper(ISQLHelper):
                     conditions[condition_name] = int(value)
         else:
             conditions = {}
-        items = self.collection.find(conditions, limit=count).skip(int(page)).sort(
-            [("time", pymongo.DESCENDING)])
+        #items = self.collection.find(conditions,{'_id':0}, limit=count).skip(int(page)).sort(
+        items = self.collection.find(conditions,{'_id':0}, limit=count).skip(int(page)).sort(
+
+                [("time", pymongo.DESCENDING)])
         results = []
         for item in items:
-            result = (item['title'], item['url'], item['category'],item['content'],item['img_path'],)
-            results.append(result)
+        #     result = (item['title'], item['url'], item['category'],item['content'],item['img_path'],)
+             results.append(item)
+
         return results
+        print(items)
+        return items
     def close_client(self):
         self.client.close()
 
@@ -70,11 +82,12 @@ class MongoHelper(ISQLHelper):
 
 
 if __name__ == '__main__':
-    from db.MongoHelp import MongoHelper as SqlHelper
+    from MongoHelp import MongoHelper as SqlHelper
     sqlhelper = SqlHelper()
-    sqlhelper.init_db()
-    # # print  sqlhelper.select(None,{'types':u'1'})
-    # items= sqlhelper.proxys.find({'types':0})
+    sqlhelper.init_db('zhihu')
+    print('sum:', str(sqlhelper.count({})))
+    #print  (sqlhelper.select(100,{'category':'guonei'},1))
+    #items= sqlhelper.proxys.find({'types':0})
     # for item in items:
     # print item
     # # # print sqlhelper.select(None,{'types':u'0'})
