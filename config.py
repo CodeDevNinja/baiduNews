@@ -54,7 +54,7 @@ def get_header():
 DB_CONFIG = {
 
    # 'DB_CONNECT_TYPE': 'sqlalchemy',  # 'pymongo'sqlalchemy;redis
-    'DB_CONNECT_STRING':'mongodb://localhost:27017/'
+    'DB_CONNECT_STRING':'mongodb://47.92.140.243:27017/'
    # 'DB_CONNECT_STRING': 'sqlite:///' + os.path.dirname(__file__) + '/data/proxy.db'
     # DB_CONNECT_STRING : 'mysql+mysqldb://root:root@localhost/proxy?charset=utf8'
 

@@ -8,8 +8,6 @@ class ToutiaoCrawl:
     def spider(self):
         browser=webdriver.Chrome('/home/caidong/developProgram/selenium/chromedriver')
         browser.get('https://www.toutiao.com/ch/news_hot/')
-
-
         browser.implicitly_wait(1)
 
         print (browser.page_source)

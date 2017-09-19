@@ -13,7 +13,7 @@ import config
 
 class ZHSpider():
     def __init__(self):
-        self.start_url = 'https://www.zhihu.com/people/kaifulee/followers?page='
+        self.start_url = 'https://www.zhihu.com/people/kaifulee/followers?page=25575'
         self.base_url = 'https://www.zhihu.com'
         self.type = ['hot', 'local', 'shehui', 'guonei', 'guoji', 'recomment', 'junshi', 'finance', 'technology',
                      'sports', 'fashionbang', 'fashionbang', 'auto_moto', 'fangcan', 'technology', 'yangshengtang']
@@ -30,16 +30,13 @@ class ZHSpider():
             "phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
         # browser = webdriver.PhantomJS(desired_capabilities=dcap)
         browser = webdriver.Chrome('/home/caidong/developProgram/selenium/chromedriver')
-        pages = 50579
-        start_page=100
-        for page in range(start_page,pages):
-            url=self.start_url+page
-            browser.get(url)
+        browser.get(url)
         # print(browser.page_source)
-            browser.implicitly_wait(10)
+        browser.implicitly_wait(10)
         # print(browser.page_source)
         # 点击关注者
-        time.sleep(2)
+        #browser.find_element_by_xpath('//div[@class="NumberBoard FollowshipCard-counts"]').click()
+        #time.sleep(2)
         # for i in range(1,10):
         #     if i<9:
         #         bt_mouseover = browser.find_element_by_xpath('//li[@class="nav_item"]['+str(i)+']/a')
@@ -107,8 +104,8 @@ class ZHSpider():
         # for i in range(self.page):
         #     load_more_xpath='//div[@class="jzgd"]/a'
         #     browser.find_element_by_xpath(load_more_xpath).click()
-        self.parse(browser.page_source, url)
-        print(browser.page_source)
+        #self.parse(browser.page_source, url)
+        # print(browser.page_source)
         # try:
         more = browser.find_elements_by_xpath('//button[@class="Button PaginationButton Button--plain"]')
         # except:
@@ -149,7 +146,7 @@ class ZHSpider():
                 self.wait_use_url_set.add(self.base_url + home_page)
                 self.totla_url_set.add(self.base_url + home_page)
                 zhihuObj = dict(user_name=name, followers=follower_c[:-3].strip(),
-                                home_page=home_page, collect='none',page_source=html
+                                home_page=home_page, collect='none'
                                 )
                 self.saveDB(zhihuObj, name)
             print(name, home_page, follower_c)
