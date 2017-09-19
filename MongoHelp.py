@@ -10,19 +10,18 @@ class MongoHelper(ISQLHelper):
     def __init__(self,):
         self.client = pymongo.MongoClient(DB_CONFIG['DB_CONNECT_STRING'], connect=False)
 
-    def init_db(self,db_name):
+    def init_db(self,db_name,col_name):
         create_time = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         self.db = self.client[db_name]
-        self.collection = self.db[create_time]
+        #self.collection = self.db[create_time]
+        #self.collection = self.db['zhihu_1']
+        self.collection = self.db[col_name]
 
     def drop_db(self):
         self.client.drop_database(self.db)
 
     def insertZhiHu(self, value=None):
         if value:
-            # newsObj = dict(user_name=value['user_name'], followers=value['followers'], flowing=value['flowing'],
-            #                collect=value['save']
-            #                )
             self.collection.insert(value)
 
     def insert(self, value=None):
@@ -46,7 +45,18 @@ class MongoHelper(ISQLHelper):
             return {'updateNum': 'ok'}
         else:
             return {'updateNum': 'fail'}
+    def select_csv(self, count=None, conditions=None,page=None):
 
+        #items = self.collection.find(conditions,{'_id':0}, limit=count).skip(int(page)).sort(
+        items = self.collection.find({},{'_id':0,'flowing':0})
+        results = []
+        for item in items:
+        #     result = (item['title'], item['url'], item['category'],item['content'],item['img_path'],)
+             results.append(item)
+
+        return results
+        print(items)
+        return items
     def select(self, count=None, conditions=None,page=None):
         if count:
             count = int(count)
@@ -84,8 +94,13 @@ class MongoHelper(ISQLHelper):
 if __name__ == '__main__':
     from MongoHelp import MongoHelper as SqlHelper
     sqlhelper = SqlHelper()
-    sqlhelper.init_db('zhihu')
+    sqlhelper.init_db('zhihu','zhihu_1')
+    pre=sqlhelper.count({})
     print('sum:', str(sqlhelper.count({})))
+    time.sleep(10)
+    now=sqlhelper.count({})
+    print('sum:', pre,now)
+    print("precent:",str((now-pre)/10))
     #print  (sqlhelper.select(100,{'category':'guonei'},1))
     #items= sqlhelper.proxys.find({'types':0})
     # for item in items:
