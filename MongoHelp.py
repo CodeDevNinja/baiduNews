@@ -47,16 +47,25 @@ class MongoHelper(ISQLHelper):
             return {'updateNum': 'fail'}
     def select_csv(self, count=None, conditions=None,page=None):
 
+       # items = self.collection.find({}, {'_id': 0})
         #items = self.collection.find(conditions,{'_id':0}, limit=count).skip(int(page)).sort(
-        items = self.collection.find({},{'_id':0,'flowing':0})
+        items = self.collection.find({"$and":[{'article_comment':{"$exists": True}},
+                                             {'answer_comment':{"$exists": True}},
+                                              {'flowing': {"$exists": True}}
+                                              ]},{'_id':0,'special_comment':0,"special_url":0,"comment_sort":0,
+                                                  "special_follower":0,"special_name":0,"home_page":0})
         results = []
         for item in items:
         #     result = (item['title'], item['url'], item['category'],item['content'],item['img_path'],)
              results.append(item)
 
         return results
-        print(items)
         return items
+
+    def select_home_url(self,condition=None,page=None,count=0):
+        items = self.collection.find(condition, {'_id': 0,}, limit=count).skip(page)
+        return items
+
     def select(self, count=None, conditions=None,page=None):
         if count:
             count = int(count)
@@ -94,11 +103,30 @@ class MongoHelper(ISQLHelper):
 if __name__ == '__main__':
     from MongoHelp import MongoHelper as SqlHelper
     sqlhelper = SqlHelper()
-    sqlhelper.init_db('zhihu','zhihu_1')
+    sqlhelper.init_db('zhihu','zhihu_all')
     pre=sqlhelper.count({})
     print('sum:', str(sqlhelper.count({})))
     time.sleep(10)
     now=sqlhelper.count({})
+    # url = sqlhelper.select_home_url({"$and":[{"special_url":{"$exists":True}},{"special_url":{"$ne":"none"}}]},count=100,page=1)
+    # print("content",url)
+    # for item in url:
+    #     print(item)
+
+
+    #####
+    # url = sqlhelper.select_home_url({"special_name":{"$exists":True}},count=100,page=1)
+    # for item in url:
+    #     print(item)
+    #
+
+
+    # #
+    url = sqlhelper.select_home_url({"user_name":"Jack"}, count=100, page=1)
+    for item in url:
+        print(item)
+
+
     print('sum:', pre,now)
     print("precent:",str((now-pre)/10))
     #print  (sqlhelper.select(100,{'category':'guonei'},1))

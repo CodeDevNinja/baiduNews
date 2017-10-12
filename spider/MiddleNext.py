@@ -18,7 +18,7 @@ class ZHSpider():
         self.type = ['hot', 'local', 'shehui', 'guonei', 'guoji', 'recomment', 'junshi', 'finance', 'technology',
                      'sports', 'fashionbang', 'fashionbang', 'auto_moto', 'fangcan', 'technology', 'yangshengtang']
         self.SqlH = SqlHelper()
-        self.SqlH.init_db('zhihu')
+        self.SqlH.init_db('zhihu','zhihu_1')
         self.page = 2
         self.totla_url_set = set()
         self.wait_use_url_set = set()

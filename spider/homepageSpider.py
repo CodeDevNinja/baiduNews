@@ -7,15 +7,17 @@ import config
 from MongoHelp import MongoHelper as SqlHelper
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+from spider.Zhihulogin import ZhihuLogin
+
 
 class ZHSpider():
     def __init__(self):
         self.black_page = 'https://www.zhihu.com/account/unhuman?type=unhuman&message=%E7%B3%BB%E7%BB%9F%E6%A3%80%E6%B5%8B%E5%88%B0%E6%82%A8%E7%9A%84%E5%B8%90%E5%8F%B7%E6%88%96IP%E5%AD%98%E5%9C%A8%E5%BC%82%E5%B8%B8%E6%B5%81%E9%87%8F%EF%BC%8C%E8%AF%B7%E8%BE%93%E5%85%A5%E4%BB%A5%E4%B8%8B%E5%AD%97%E7%AC%A6%E7%94%A8%E4%BA%8E%E7%A1%AE%E8%AE%A4%E8%BF%99%E4%BA%9B%E8%AF%B7%E6%B1%82%E4%B8%8D%E6%98%AF%E8%87%AA%E5%8A%A8%E7%A8%8B%E5%BA%8F%E5%8F%91%E5%87%BA%E7%9A%84'
-        self.start_url = 'https://www.zhihu.com/people/kaifulee/followers'
+        self.start_url = 'https://www.zhihu.com/people/kaifulee/followers?page=25583'
         #self.start_url = 'https://www.zhihu.com/people/ji-da-fa-37/activities'
         self.base_url = 'https://www.zhihu.com'
         self.SqlH = SqlHelper()
-        self.SqlH.init_db('zhihu','zhihu_1')
+        self.SqlH.init_db('zhihu','zhihu_48000')
         #self.browser = webdriver.PhantomJS()
         # proxy = {'address': '60.168.104.30:3128',
         #          'username': 'user11',
@@ -34,10 +36,21 @@ class ZHSpider():
         # capabilities['proxy']['httpPassword'] = proxy['password']
         # chromeOptions = webdriver.ChromeOptions()
         # chromeOptions.add_argument('--proxy-server=http://60.168.104.30:3128')
-        # self.browser = webdriver.Chrome(chrome_options=chromeOptions,executable_path='/home/caidong/developProgram/selenium/chromedriver')
+        #self.browser = webdriver.Chrome(chrome_options=chromeOptions,executable_path='/home/caidong/developProgram/selenium/chromedriver')
+        #self.browser = webdriver.PhantomJS()
+        #cookies = ZhihuLogin().login()
+        #print(cookies)
+        self.browser = webdriver.PhantomJS()
         self.browser = webdriver.Chrome(executable_path='/home/caidong/developProgram/selenium/chromedriver')
-        self.start_page = 49876
-        self.end_page = 4000
+        #for cookie in cookies:
+          #  self.browser.add_cookie({cookie['name']:cookie['value']})
+        #self.browser.add_cookie(cookie)
+        time.sleep(5)
+        print('cookie',self.browser.get_cookies())
+        #print(self.browser.get_cookies())
+        #self.browser.add_cookie({"cookie":'_zap=b24c85f0-aae0-456a-ba87-e0919de79409; __utma=243313742.618834370.1505397831.1505397831.1505431589.2; __utmz=243313742.1505397831.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); d_c0="AJCCExnEYAyPTuiuB47mCQN_anS_LW2ZmQI=|1505432287"; q_c1=f92e81f1440d49eca643b9bd71df1d06|1505471670000|1502586350000; aliyungf_tc=AQAAABpahiv+pQIA4wmi0wpuOA0ptCdt; __utma=51854390.226003310.1505817316.1505817316.1505817316.1; __utmc=51854390; __utmz=51854390.1505817316.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmv=51854390.000--|3=entry_date=20170813=1; XSRF-TOKEN=2|02bd5b9f|30893afa3ad96af92f8d3ffb67906faa338d76fe308d3fb267de6cad358569a837dc39ae|1505824255; _xsrf=24ae8d1f-0dde-4510-a20d-ec7278275ab1; l_cap_id="NDYzOWZmNjBmZDhjNDBkZWI5MDg0NjYyZDk4YTk2OTA=|1505824625|220e4527cbfe214589599d071685e4c7f62143fc"; r_cap_id="NWJhOTRmYzg2NTVlNDczY2ExZWY3YzgxNGQ2ZmRmM2I=|1505824625|b050327da2a8dedc37a8e744640b60b553f3b771"; cap_id="YjcyNGZkYjFlY2JkNDU3ZWFlYmQ0NjQ3ZDJmNDcwZjk=|1505824625|5804f3f4999cf311334c3664f2e41ad2d4d93029'})
+        self.start_page = 48000
+        self.end_page = 47000
     def crawlData(self, url=None):
         dcap = dict(DesiredCapabilities.PHANTOMJS)
         dcap[
@@ -47,10 +60,11 @@ class ZHSpider():
         self.browser.get(url)
         i=1
         if i==1:
-            time.sleep(15)
+            time.sleep(30)
             i=i+1
         # print(browser.page_source)
         self.browser.implicitly_wait(3)
+        print('cookie',self.browser.get_cookies())
         print(self.browser.page_source)
         # 点击关注者
         self.browser.find_element_by_xpath('//div[@class="NumberBoard FollowshipCard-counts"]').click()
@@ -66,15 +80,20 @@ class ZHSpider():
                 '//button[@class="Button PaginationButton PaginationButton--current Button--plain"]').text
                 print(c_page)
                 print('当前页:', str(curren_page))
+
                 #点击上一页
+                # self.browser.find_element_by_xpath(
+                #     '//button[@class="Button PaginationButton PaginationButton-prev Button--plain"]').click()
+               #点击下一页
                 self.browser.find_element_by_xpath(
-                    '//button[@class="Button PaginationButton PaginationButton-prev Button--plain"]').click()
+                    '//Button PaginationButton PaginationButton-next Button--plain"]').click()
                 self.browser.implicitly_wait(3)
                 if int(c_page) < self.start_page and int(c_page) > self.end_page:
-                        self.loop_list()
-                # try:
-                # except:
-                #          print('循环点击列表出错')
+                 try:
+                    self.loop_list()
+
+                 except:
+                          print('循环点击列表出错')
     #循环解析当前列表
     def loop_list(self):
         items = self.browser.find_elements_by_xpath('//div[@class="ContentItem-head"]//a[@class="UserLink-link"]')

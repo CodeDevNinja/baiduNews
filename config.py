@@ -52,9 +52,10 @@ def get_header():
 数据库的配置
 '''
 DB_CONFIG = {
-
-   # 'DB_CONNECT_TYPE': 'sqlalchemy',  # 'pymongo'sqlalchemy;redis
-    'DB_CONNECT_STRING':'mongodb://47.92.140.243:27017/'
+  #'DB_CONNECT_STRING': 'mongodb://127.0.0.1:27017/'
+  'DB_CONNECT_STRING': 'mongodb://zhihu:zhihuzcd123@47.92.140.243/zhiHu'
+    # 'DB_CONNECT_TYPE': 'sqlalchemy',  # 'pymongo'sqlalchemy;redis
+    #'DB_CONNECT_STRING':'mongodb://47.92.140.243:27017/'
    # 'DB_CONNECT_STRING': 'sqlite:///' + os.path.dirname(__file__) + '/data/proxy.db'
     # DB_CONNECT_STRING : 'mysql+mysqldb://root:root@localhost/proxy?charset=utf8'
 
@@ -66,3 +67,7 @@ DB_CONFIG = {
 NEWS_TYPE = {
     'ent'
 }
+ACCOUNT = [ '13123516059','13197676924','13132604603','13277850524',  '13252015365',  '15678195348',
+            '13087919432',  '15678374314','15578289954','13058664671','13152659648', '15677924542',
+            '15676630124','13175336547','15578186284',
+            '13299203247','13157030349','15577828945',]
