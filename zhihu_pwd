@@ -1,0 +1,36 @@
+13197670564  111111
+13123516059  123456
+13197676924  123456
+13132604603  123456
+13277850524  123456
+13252015365  123456
+15678195348  123456
+13087919432  123456
+15678374314
+15578289954
+13058664671
+13152659648 123456
+15677924542
+15676630124
+13175336547
+15578186284
+13299203247
+13157030349
+15577828945 123456
+
+mongo localhost -u zcdmongo -p zcd.. --authenticationDatabase admin --authenticationMechanism SCRAM-SHA-1
+db.createUser(
+  {
+    user: "weixin",
+    pwd: "weixin123",
+    roles: [ { role: "readWrite", db: "weixin" },
+  }
+)
+
+db.createUser(
+  {
+    user: "zhihu",
+    pwd: "zhihuzcd123",
+    roles: [ { role: "readWrite", db: "zhiHu" },
+  }
+)

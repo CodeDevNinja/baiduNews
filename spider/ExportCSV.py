@@ -8,18 +8,17 @@ headers = ['user_name','answer_comment_1','answer_comment_2','answer_comment_3',
 con ={"$and":[{'article_comment':{"$exists": True}},
                                              {'answer_comment':{"$exists": True}},
                                               {'flowing': {"$exists": True}},
-              {'export_flag': {"$exists": True}}
+             # {'export_flag': {"$exists": False}}
                                               ]}
 #
 print(SqlH.count(con))
-time.sleep(10)
+time.sleep(100)
 print(SqlH.count(con))
-
-rows=SqlH.select_csv()
-#SqlH.insertZhiHu(rows)
-
-# print(rows)
-# with open('zhihu_sample.csv','w') as f:
+#
+# rows=SqlH.select_csv()
+#
+# #print(rows)
+# with open('zhihu_add_1.csv','w') as f:
 #     f_csv = csv.DictWriter(f, headers)
 #     f_csv.writeheader()
 #     for row in rows:

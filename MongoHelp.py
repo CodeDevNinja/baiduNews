@@ -51,7 +51,8 @@ class MongoHelper(ISQLHelper):
         #items = self.collection.find(conditions,{'_id':0}, limit=count).skip(int(page)).sort(
         items = self.collection.find({"$and":[{'article_comment':{"$exists": True}},
                                              {'answer_comment':{"$exists": True}},
-                                              {'flowing': {"$exists": True}}
+                                              {'flowing': {"$exists": True}},
+                                              {'export_flag': {"$exists": False}},
                                               ]},{'_id':0,'special_comment':0,"special_url":0,"comment_sort":0,
                                                   "special_follower":0,"special_name":0,"home_page":0})
         results = []
